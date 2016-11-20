@@ -5,16 +5,16 @@ function houghT(binImage, HT, dSampling, thetaSampling)
 %   dSampling       - the interval in which d should be sampled
 %   thetaSampling   - the interval in which theta should be sampled
     [height, width] = size(binImage);
-    dMax = floor(sqrt(height * height + width * width));
+    dMax = round(sqrt(height * height + width * width));
     d = (-dMax):dSampling:dMax;
     theta = degtorad(0:thetaSampling:180);
     
     szD = size(d);
     szTheta = size(theta);
     rangeMatrix = zeros(szD(1,2), szTheta(1,2));
-    for x = 1:height
-        for y = 1:width
-            if binImage(x,y) == 1
+    for x = 1:width
+        for y = 1:height
+            if binImage(x,y) > 0
                 for thetaItr = 1:szTheta(1,2)
                     dTemp = x * cos(theta(thetaItr)) + y * sin(theta(thetaItr));
                     dTemp = dTemp;
@@ -43,5 +43,3 @@ function houghT(binImage, HT, dSampling, thetaSampling)
         end
     end
 end
-
-
