@@ -17,32 +17,34 @@ function houghT(origImage, binImage, HT, dSampling, thetaSampling)
     rangeMatrix = zeros(szD(1,2), szTheta(1,2));
 
       count = 0;
-%        for x = 1:width
-%            for y = 1:height
-%                if binImage(y, x) > 0
-%                    for thetaItr = 1:szTheta(1,2)
-%                        dTemp = y * cos(theta(thetaItr)) + x * sin(theta(thetaItr));
-%                        dTemp = dTemp;
-%                        [~, dIdx] = min(abs(d - dTemp));
-%                        rangeMatrix(dIdx, thetaItr) = rangeMatrix(dIdx, thetaItr) + 1;
-%                    end
-%                end
-%            end
-%        end
-    [xIndicies, yIndicies] = find(binImage);
-
-    %Preallocate space for the accumulator array
-    numEdgePixels = numel(xIndicies);
-    accumulator = zeros(numEdgePixels,numThetas);
-    cosine = (0:height-1)'*cos(theta); %Matrix Outerproduct  
-    sine = (0:width-1)'*sin(theta); %Matrix Outerproduct
-
-    accumulator((1:numEdgePixels),:) = cosine(xIndicies,:) + sine(yIndicies,:);
-    for i = (1:numThetas)
-        rangeMatrix(:,i) = hist(accumulator(:,i),d);
-    end
+       for x = 1:width
+           for y = 1:height
+               if binImage(y, x) > 0
+                   for thetaItr = 1:szTheta(1,2)
+                       dTemp = y * cos(theta(thetaItr)) + x * sin(theta(thetaItr));
+                       dTemp = dTemp;
+                       [~, dIdx] = min(abs(d - dTemp));
+                       rangeMatrix(dIdx, thetaItr) = rangeMatrix(dIdx, thetaItr) + 1;
+                   end
+               end
+           end
+       end
+%       To run fast, comment above loop and use below code.
+%       http://rosettacode.org/wiki/Example:Hough_transform/MATLAB
+%      [xIndicies, yIndicies] = find(binImage);
+%  
+%      %Preallocate space for the accumulator array
+%      numEdgePixels = numel(xIndicies);
+%      accumulator = zeros(numEdgePixels,numThetas);
+%      cosine = (0:height-1)'*cos(theta); %Matrix Outerproduct  
+%      sine = (0:width-1)'*sin(theta); %Matrix Outerproduct
+%  
+%      accumulator((1:numEdgePixels),:) = cosine(xIndicies,:) + sine(yIndicies,:);
+%      for i = (1:numThetas)
+%          rangeMatrix(:,i) = hist(accumulator(:,i),d);
+%      end
     if HT == -1
-        HT = 0.5 * max(rangeMatrix(:));
+        HT = 0.75 * max(rangeMatrix(:));
     end
     figure(1);
     imagesc(origImage);
@@ -60,4 +62,14 @@ function houghT(origImage, binImage, HT, dSampling, thetaSampling)
         end
     end
     count
+    imshow(imadjust(mat2gray(rangeMatrix)),[],...
+       'XData',theta,...
+       'YData',d,...
+       'InitialMagnification','fit');
+    xlabel('\theta (degrees)')
+    ylabel('\rho')
+    axis on
+    axis normal
+    hold on
+    colormap(hot)
 end
