@@ -7,8 +7,8 @@ function binImage = sobelOperator(I, threshold)
 sobelX = [-1 0 1; -1 0 1; -1 0 1];
 sobelY = sobelX';
 imgGray = rgb2gray(I);
-Ix = conv2(imgGray,sobelX);
-Iy = conv2(imgGray, sobelY);
+Ix = conv2(imgGray, sobelX, 'same');
+Iy = conv2(imgGray, sobelY, 'same');
 IMag = sqrt(Ix.^2 + Iy.^2);
 binImage = IMag > threshold;
 end

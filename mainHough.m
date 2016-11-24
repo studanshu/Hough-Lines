@@ -12,13 +12,25 @@ houghT(img, img, HT, dSampling, thetaSampling);
 
 
 laneImage = imread('lanes.png');
-binImage = sobelOperator(laneImage, 160);
-houghT(laneImage, binImage, -1, 1, 1);
+binImage = sobelOperator(laneImage, 170);
+binImage(:,1:10) = 0;
+binImage(1:10,:) = 0;
+binImage(:,(end-10):end) = 0;
+binImage((end-10):end,:) = 0;
+houghT(laneImage, binImage, -1, 2, 1);
 
 commons1 = imread('mscommons1.jpeg');
-binImage = sobelOperator(commons1, 160);
-houghT(commons1, binImage, -1, 2, 0.5);
+binImage = sobelOperator(commons1, 50);
+binImage(:,1:10) = 0;
+binImage(1:10,:) = 0;
+binImage(:,(end-10):end) = 0;
+binImage((end-10):end,:) = 0;
+houghT(commons1, binImage, -1, 1, 1);
 
 commons2 = imread('mscommons2.jpeg');
-binImage = sobelOperator(commons2, 160);
+binImage = sobelOperator(commons2, 80);
+binImage(:,1:10) = 0;
+binImage(1:10,:) = 0;
+binImage(:,(end-10):end) = 0;
+binImage((end-10):end,:) = 0;
 houghT(commons2, binImage, -1, 2, 0.5);
